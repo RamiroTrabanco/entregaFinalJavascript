@@ -6,7 +6,7 @@
 }
 
 .colorTexto {
-    color:#B0A98D;
+    color:black;
 }
 
 .negrita {
@@ -55,7 +55,7 @@ header article {
 
 header article ul a{
     text-decoration: none;
-    color:#B0A98D;
+    color:white;
 }
 
 main section {
@@ -86,7 +86,7 @@ main section div p {
     display: flex;
     flex-flow: column nowrap;
     text-align: center;
-    color:#B0A98D;
+    color:black;
     margin-top: 5px;
 }
 
@@ -138,7 +138,7 @@ footer {
     flex-flow: row nowrap;
     justify-content: space-around;
     background-color: #0E0F0F;
-    color:#B0A98D;
+    color:white;
     padding: 30px;
     margin-top: 4%;
 }
