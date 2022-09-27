@@ -8,7 +8,9 @@ let nuevosIngresos = []
 
 let contenidoCardHTML = ""
 
-let infoProductos = document.querySelector(".dataProductos")
+let total = 0
+
+const infoProductos = document.querySelector(".dataProductos")
 
 const nuevoProductoCard = (contenido) => {
     return `
@@ -67,6 +69,7 @@ productos.push(new Productos("Placa de Video Asrock AMD Radeon RX 6500 XT", 5000
 productos.push(new Productos("Placa de Video AMD Radeon PowerColor Rx 6600", 77000, 50, 1607, "https://www.maximus.com.ar/Temp/App_WebSite/App_PictureFiles/Items/AXRX-6600-8GBD6-3DH_800.jpg"))
 productos.push(new Productos("Placa de Video AMD Radeon Rx 6650 XT", 95000, 50, 1608, "https://www.maximus.com.ar/Temp/App_WebSite/App_PictureFiles/Items/GV-R665XTGAMING-OC-8GD_800.jpg"))
 
+
 function agregarProductosAlDom() {
     let container = document.querySelector(".container");
     productos.forEach( el => {
@@ -82,6 +85,24 @@ function agregarProductosAlDom() {
     })
 }
 
+function botonAgregarClickeado(ev) {
+    const boton = ev.target
+    const producto = boton.closest(".card")
+    const productoNombre = producto.querySelector(".productoTitulo").textContent
+    const productoPrecio = producto.querySelector(".productoPrecio").textContent.replace("$", " ")
+    const productoImg = producto.querySelector("#productoImg").src
+
+    if (carrito === null) {
+        carrito = []
+        carrito.push(new Carrito(productoNombre, productoPrecio, productoImg))
+    }
+    else {
+        carrito.push(new Carrito(productoNombre, productoPrecio, productoImg))
+    }
+
+    agregarProductoAlCarrito(productoNombre , productoPrecio, productoImg)
+}
+
 agregarProductosAlDom()
 
 const agregarProductoBoton = document.querySelectorAll(".card")
@@ -90,17 +111,6 @@ agregarProductoBoton.forEach(botonAgregarAlCarrito => {
     botonAgregarAlCarrito.addEventListener("click", botonAgregarClickeado)
 })
 
-function botonAgregarClickeado(ev) {
-    const boton = ev.target
-    const producto = boton.closest(".card")
-    const productoNombre = producto.querySelector(".productoTitulo").textContent
-    const productoPrecio = producto.querySelector(".productoPrecio").textContent.replace("$", " ")
-    const productoImg = producto.querySelector("#productoImg").src
-
-    carrito.push(new Carrito(productoNombre, productoPrecio, productoImg))
-
-    agregarProductoAlCarrito(productoNombre , productoPrecio, productoImg)
-}
 
 function borrarOculto() {
     let claseOculta = document.querySelectorAll("#oculto")
@@ -171,11 +181,9 @@ function guardarCarrito() {
 }
 
 function recuperoCarrito() {
-    localStorage.carrito != " " ? carrito = JSON.parse(localStorage.getItem("carrito")) : carrito = []
+    localStorage.carrito != " " ? carrito = JSON.parse(localStorage.getItem("carrito")) : localStorage.carrito = []
     carrito.forEach(el => {agregarProductoAlCarrito(el.nombre, el.valor, el.img)})
 }   
-
-recuperoCarrito()
 
 function comprarCarrito() {
     let botonCarritoComprar = document.querySelector(".botonCarritoComprar")
@@ -188,18 +196,23 @@ function comprarCarrito() {
         denyButtonText: "No",
         showDenyButton: true,
         showConfirmButton: true,}).then((result) => {
+            
             if (result.isConfirmed) {
-              Swal.fire(
-                'Confirmamos tu compra!',
+            Swal.fire(
+                'Muchas gracias por tu compra!',
                 'Te enviamos un mail, seguí los pasos para continuar',
                 'success'
-              )} else if (result.isDenied) {
+            )
+            compraRealizada()    
+            }
+            
+            else if (result.isDenied) {
                 Swal.fire(
                 'Compra cancelada',
                 'Contá con nuestros productos cuando los necesites',
                 'error'
                 )
-              }})
+            }})
     })
 }
 
@@ -207,17 +220,34 @@ function comprarCarrito() {
 function limpiarCarrito() {
     let botonCarritoLimpiar = document.querySelector(".vaciarCarrito")
     botonCarritoLimpiar.addEventListener("click", () => {
-        let cardsDelCarrito = document.querySelector(".carritoTotal")
-        cardsDelCarrito.remove()
+        let cardsDelCarrito = document.querySelectorAll(".productoFilaCarrito")
+        for (card of cardsDelCarrito){
+            if (cardsDelCarrito.length > -1){
+                card.remove()
+            }
+        }
+        cardsDelCarrito.remove
         carrito = []
         localStorage.setItem("carrito", JSON.stringify(carrito))
         Swal.fire({
             title: 'El carrito ahora está vacío',
             icon: "warning",
-            text: 'Por favor, recargá la página si querés volver a comprar'
         })
+        total = 0
+        calcularTotal()
 })}
 
-comprarCarrito()
+function compraRealizada() {
+    let cardsDelCarrito = document.querySelectorAll(".productoFilaCarrito")
+        for (card of cardsDelCarrito){
+            if (cardsDelCarrito.length > -1){
+                card.remove()
+            }
+        }
+    carrito = []
+    localStorage.setItem("carrito", JSON.stringify(carrito))
+    total = 0
+    calcularTotal()
+}
 
-limpiarCarrito()
+recuperoCarrito()

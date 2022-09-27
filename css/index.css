@@ -14,7 +14,7 @@
 }
 
 body {
-    background-color: #202324;
+    background-color: #E0FFFF;
     width: 100%;
     height: 0vh;
     border-top: black 25px solid;
@@ -181,7 +181,7 @@ article table tr td img {
     margin-top: 10px;
     margin-left: 15%;
     font-size: 17px;
-    color: white;
+    color: black;
 }
 
 .botonCarrito {
@@ -236,7 +236,7 @@ h3 {
     display: flex;
     font-size: 22px;
     align-content: center;
-    color: white;
+    color: black;
     margin-left: 0%;
     margin-bottom: 2%;
 }
