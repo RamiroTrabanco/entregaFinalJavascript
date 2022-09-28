@@ -216,4 +216,4 @@ function compraRealizada() {
     calcularTotal()
 }
 
-recuperoCarrito()
+if (localStorage.carrito) {recuperoCarrito()}
